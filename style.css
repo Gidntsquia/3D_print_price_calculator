@@ -1,0 +1,15 @@
+logo {
+	text-align: center;
+}
+
+body {
+	text-align: left;
+	margin-left: 20px;
+}
+
+footer {
+	text-align: center;
+	padding: 1px;
+	background-color: green;
+	color: white;
+}
