@@ -11,11 +11,11 @@ $ git clone https://github.com/Gidntsquia/Gidntsquia.github.io.git
 ## :rocket: Contribution Guide
 Let's say you want to add a new feature to the code. Here are the steps you would follow (assuming you use `git` from the command line):
 
-1. Make a [GitHub issue](https://github.com/team-pass/FIDO-login/issues) describing the feature. Write enough info so that someone else could complete the task just by reading through your description.
-2. In terminal, navigate to your local `FIDO-login` folder and run
+1. Make a [GitHub issue](https://github.com/Gidntsquia/Gidntsquia.github.io/issues) describing the feature. Write enough info so that someone else could complete the task just by reading through your description.
+2. In terminal, navigate to your local `Gidntsquia.github.io` folder and run
 ```bash
 $ git checkout master # Switch branches to `master` (if you're not already there)
-$ git pull            # Pull down changes from the remote FIDO-login repository (on github.com)
+$ git pull            # Pull down changes from the remote Gidntsquia.github.io repository (on github.com)
 ```
 3. Now, make a new branch off of `master` for your feature. For example, if you were writing the HTML for the home page, you might run the following:
 ```bash
@@ -39,7 +39,7 @@ $ git push # Sends all of your commited changes to the remote (github.com)
 ```
 This command might throw an error because the branch isn't currently tracked by github. In that case, it will show you a command to run, which looks something like this:
 ```bash
-$ git push --set-upstream origin login-page
+$ git push --set-upstream origin home-page
 ```
 7. Now, you should see a new branch on github with your new changes.
 8. If you think your code is ready to go into the app, it's time to submit a pull request (from your feature branch into master). To do so, click on the `Pull Requests` tab at the top of the Buzzer repository and submit a new `Pull Request`.
