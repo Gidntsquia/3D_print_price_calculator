@@ -5,7 +5,7 @@ Currently, we have a home page with example text on it.
 ## :file_folder: Project Structure
 The project is broken up as follows:
 
-- `*.html`: HTML files for the login, registration, and user profile pages
+- `*.html`: HTML files for the home page
 - `assets/`: Stores all media for the project (e.g., images, fonts, CSS)
 - `scripts`: Mostly JavaScript code
 
