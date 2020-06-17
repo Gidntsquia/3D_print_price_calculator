@@ -33,7 +33,7 @@ $ git add FILE_YOU_EDITED ANOTHER_FILE_YOU_EDITED
 $ git commit -m "Write a descriptive commit message that describes all of the changes you made"
 ```
 > Note that instead of manually calling `git add` on all the files, you can also use `git add .` to add all the files in the current directory.
-6. After you've commited all your changes, it's time to send the code up to GitHub so everyone on Team PASS has access. To do that, run
+6. After you've commited all your changes, it's time to send the code up to GitHub so everyone on the team has access. To do that, run
 ```bash
 $ git push # Sends all of your commited changes to the remote (github.com)
 ```
