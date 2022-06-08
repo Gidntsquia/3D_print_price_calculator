@@ -1,35 +1,67 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Buzzer Online</title>
-    <link rel="stylesheet" type="text/css" href="style.css">
-    <link rel="apple-touch-icon" sizes="57x57" href="/frontend/assets/images/apple-icon-57x57.png">
-    <link rel="apple-touch-icon" sizes="60x60" href="/frontend/assets/images/apple-icon-60x60.png">
-    <link rel="apple-touch-icon" sizes="72x72" href="/frontend/assets/images/apple-icon-72x72.png">
-    <link rel="apple-touch-icon" sizes="76x76" href="/frontend/assets/images/apple-icon-76x76.png">
-    <link rel="apple-touch-icon" sizes="114x114" href="/frontend/assets/images/apple-icon-114x114.png">
-    <link rel="apple-touch-icon" sizes="120x120" href="/frontend/assets/images/apple-icon-120x120.png">
-    <link rel="apple-touch-icon" sizes="144x144" href="/frontend/assets/images/apple-icon-144x144.png">
-    <link rel="apple-touch-icon" sizes="152x152" href="/frontend/assets/images/apple-icon-152x152.png">
-    <link rel="apple-touch-icon" sizes="180x180" href="/frontend/assets/images/apple-icon-180x180.png">
-    <link rel="icon" type="image/png" sizes="192x192"  href="/frontend/assets/images/android-icon-192x192.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="/frontend/assets/images/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="96x96" href="/frontend/assets/images/favicon-96x96.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="/frontend/assets/images/favicon-16x16.png">
-    <link rel="manifest" href="/frontend/assets/images/manifest.json">
-    <meta name="msapplication-TileColor" content="#ffffff">
-    <meta name="msapplication-TileImage" content="/frontend/assets/images/ms-icon-144x144.png">
-    <meta name="theme-color" content="#ffffff">
-  </head>
-  
-  <body>
-    <p>Yeah we testin' in deployment. What of it?? ;) Aw yeah </p>
-    <form action="/test.php" method ="get">
-    <input type="file" accept=".stl">
-    <input type="submit" submit>
-    </form>
-    <br>
-  </body>
+<html>
+
+<head>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/@holoviz/panel@0.13.0/dist/bundled/bootstraptemplate/bootstrap.css">
+
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vega@5"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vega-lite@5"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vega-embed@6"></script>
+    <script type="text/javascript" src="https://unpkg.com/tabulator-tables@4.9.3/dist/js/tabulator.js"></script>
+    <script type="text/javascript" src="https://cdn.bokeh.org/bokeh/release/bokeh-2.4.2.js"></script>
+    <script type="text/javascript" src="https://cdn.bokeh.org/bokeh/release/bokeh-widgets-2.4.2.min.js"></script>
+    <script type="text/javascript" src="https://cdn.bokeh.org/bokeh/release/bokeh-tables-2.4.2.min.js"></script>
+    <script type="text/javascript" src="https://unpkg.com/@holoviz/panel@0.13.0/dist/panel.min.js"></script>
+    <script type="text/javascript">
+      Bokeh.set_log_level("info");
+    </script>
+
+    <link rel="stylesheet" href="https://pyscript.net/alpha/pyscript.css" />
+    <script defer src="https://pyscript.net/alpha/pyscript.js"></script>
+    <py-env>
+        - numpy
+        - pandas
+        - panel==0.13.1a2
+        - paths:
+          - ./measure_volume.py
+    </py-env>
+</head>
+
+<body>
+    <p>Check this out: <label id='vol'></label></p>
+    <div class="container-fluid d-flex flex-column vh-100 overflow-hidden" id="container">
+
+        <div class="row overflow-hidden" id="content">
+            <div class="col mh-100 float-left" id="main">
+                <div id="fileinput"></div>
+                <div id="table"></div>
+            </div>
+        </div>
+    </div>
+    
+    <py-script>
+import asyncio
+import panel as pn
+import pandas as pd
+from panel.io.pyodide import show
+import measure_volume as measure
+
+
+file_input = pn.widgets.FileInput(accept='.stl', width=180)
+button_upload = pn.widgets.Button(name='Upload', button_type='primary', width=100)
+row = pn.Row(file_input, button_upload, height=75)
+
+
+def process_file(event):
+    if file_input.value is not None:
+        mySTLUtils = measure.STLUtils()
+        volume = mySTLUtils.calculateVolume(io.BytesIO(file_input.value), "cm")
+        pyscript.write('vol', volume)
+
+button_upload.on_click(process_file)
+
+await show(row, 'fileinput')
+    </py-script>
+</body>
+
 </html>
