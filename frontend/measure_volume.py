@@ -14,7 +14,6 @@ Material Mass Source: https://www.toybuilderlabs.com/blogs/news/13053117-filamen
 import struct
 import sys
 
-print("Starting!")
 # Choose desired print material of STL file below:
 material = 2
 
