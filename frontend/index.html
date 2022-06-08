@@ -28,13 +28,14 @@
 </head>
 
 <body>
-    <p>Check this out: <label id='vol'></label></p>
     <div class="container-fluid d-flex flex-column vh-100 overflow-hidden" id="container">
 
         <div class="row overflow-hidden" id="content">
             <div class="col mh-100 float-left" id="main">
+                <div id="intro">Upload your .stl:</div>
                 <div id="fileinput"></div>
-                <div id="table"></div>
+                <div id="priceHolder">Your price: <label id='price'></label></div>
+                <div id="buyNowButton"><a href="https://www.3dpz.xyz/">Buy Now</a></div>
             </div>
         </div>
     </div>
@@ -43,6 +44,7 @@
 import asyncio
 import panel as pn
 import pandas as pd
+import numpy as np
 from panel.io.pyodide import show
 import measure_volume as measure
 
@@ -52,13 +54,32 @@ button_upload = pn.widgets.Button(name='Upload', button_type='primary', width=10
 row = pn.Row(file_input, button_upload, height=75)
 
 
+print("my main")
+
 def process_file(event):
     if file_input.value is not None:
+        print("YOOO")
         mySTLUtils = measure.STLUtils()
         volume = mySTLUtils.calculateVolume(io.BytesIO(file_input.value), "cm")
-        pyscript.write('vol', volume)
+        pyscript.write('price', "$" + str(calculate_price(volume)))
+        document.getElementById('buyNowButton').style.display = 'block'
+
+def calculate_price(volume):
+    rawCost = (volume / 1000 * 20);
+    markup = 200 #%
+
+    rawCost = rawCost * markup / 100
+
+
+
+    # Round to nearest cent
+    cost = np.floor(rawCost * 100) / 100 
+
+    return cost
 
 button_upload.on_click(process_file)
+
+document.getElementById('buyNowButton').style.display = 'none'
 
 await show(row, 'fileinput')
     </py-script>
