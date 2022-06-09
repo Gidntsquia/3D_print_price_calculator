@@ -56,14 +56,13 @@ row = pn.Row(file_input, button_upload, height=75)
 
 def process_file(event):
     if file_input.value is not None:
-        print("YOOO")
         mySTLUtils = measure.STLUtils()
         volume = mySTLUtils.calculateVolume(io.BytesIO(file_input.value), "cm")
         pyscript.write('price', "$" + str(calculate_price(volume)))
         document.getElementById('buyNowButton').style.display = 'block'
 
 def calculate_price(volume):
-    rawCost = (volume / 1000 * 20);
+    rawCost = (volume * 1.25 / 1000 * 20);
     markup = 200 #%
 
     rawCost = rawCost * markup / 100
