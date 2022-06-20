@@ -65,7 +65,6 @@ def process_file(event):
         document.getElementById('priceHolder').style.display = 'block'
 
 def calculate_price(volume):
-    _OFFSET = 1.5
 
     # Volume * grams conversion rate * ~30% infill
     # Surface area * 0.04 somewhat accounts for the solid outer layer.
@@ -73,12 +72,12 @@ def calculate_price(volume):
     grams = volume * 1.25 * 0.3 + volume * 5.251 * 0.04
 
     # 3DPZ price includes material + time
-    raw_cost = grams / 1000 * 20
+    raw_cost = grams / 1000 * 25
     raw_hours = grams / 7.5
 
     # Basically the profit margins
-    markup = 150 #%
-    per_hour = 0.05 #cents 
+    markup = 100 #%
+    per_hour = 0.04 #cents 
 
     # Calculate prices
     zest_cost = raw_cost * (1 + markup / 100) + raw_hours * per_hour
