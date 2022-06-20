@@ -34,7 +34,8 @@
             <div class="col mh-100 float-left" id="main">
                 <div id="intro">Upload your .stl:</div>
                 <div id="fileinput"></div>
-                <div id="priceHolder">Your price: <label id='price'></label></div>
+                <div id="priceHolder">Our price: <label id='price_label'></label> 
+                    &emsp;&emsp;TerrapinWorks Price: <label id='tworks_price_label'></label></div>
                 <div id="buyNowButton"><a href="https://www.3dpz.xyz/">Buy Now</a></div>
             </div>
         </div>
@@ -58,21 +59,28 @@ def process_file(event):
     if file_input.value is not None:
         mySTLUtils = measure.STLUtils()
         volume = mySTLUtils.calculateVolume(io.BytesIO(file_input.value), "cm")
-        pyscript.write('price', "$" + str(calculate_price(volume)))
+        zest_price, tworks_price = calculate_price(volume)
+        pyscript.write('price_label', "$" + zest_price)
+        pyscript.write('tworks_price_label', "$" + tworks_price)
         document.getElementById('buyNowButton').style.display = 'block'
 
 def calculate_price(volume):
-    rawCost = (volume * 1.25 / 1000 * 20);
-    markup = 200 #%
+    # Volume * grams conversion rate * ~25% infill
+    grams = volume * 1.25 * 0.25  
+    raw_cost = grams / 1000 * 20
+    markup = 100 #%
 
-    rawCost = rawCost * markup / 100
-
+    zest_cost = raw_cost * (markup / 100 + 1)
+    tworks_cost = grams * 0.032777 + 5.06 + 0.018 * grams
+    
 
 
     # Round to nearest cent
-    cost = np.floor(rawCost * 100) / 100 
+    zest_cost = np.floor(zest_cost * 100) / 100 
+    tworks_cost = np.floor(tworks_cost * 100) / 100
+    
 
-    return cost
+    return str(zest_cost), str(tworks_cost)
 
 button_upload.on_click(process_file)
 
