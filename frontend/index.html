@@ -35,7 +35,6 @@
                 <div id="intro">Upload your .stl:</div>
                 <div id="fileinput"></div>
                 <div id="priceHolder">Our price: <label id='price_label'></label> 
-                    &emsp;&emsp;TerrapinWorks Price: <label id='tworks_price_label'></label></div>
                 <div id="buyNowButton"><a href="https://www.3dpz.xyz/">Buy Now</a></div>
             </div>
         </div>
@@ -58,9 +57,12 @@ def process_file(event):
     if file_input.value is not None:
         mySTLUtils = measure.STLUtils()
         volume = mySTLUtils.calculateVolume(io.BytesIO(file_input.value), "cm")
-        zest_price, tworks_price = calculate_price(volume)
+
+        # Calculate 3D-PZ price
+        zest_price = calculate_price(volume)
+
+        # Write to web page
         pyscript.write('price_label', "$" + zest_price)
-        pyscript.write('tworks_price_label', "$" + tworks_price)
         document.getElementById('buyNowButton').style.display = 'block'
         document.getElementById('priceHolder').style.display = 'block'
 
@@ -71,26 +73,14 @@ def calculate_price(volume):
     # "5.251" comes from assumption that the print is capsule shaped.
     grams = volume * 1.25 * 0.3 + volume * 5.251 * 0.04
 
-    # 3DPZ price includes material + time
-    raw_cost = grams / 1000 * 25
-    raw_hours = grams / 7.5
-
-    # Basically the profit margins
-    markup = 100 #%
-    per_hour = 0.04 #cents 
-
-    # Calculate prices
-    zest_cost = raw_cost * (1 + markup / 100) + raw_hours * per_hour
-    tworks_cost = grams * 0.032777 + 5.06 + 0.018 * grams
-    
+    # Calculate price. 6 cents per gram.
+    zest_cost = grams * 0.06
 
 
     # Round to nearest cent
     zest_cost = np.floor(zest_cost * 100) / 100 
-    tworks_cost = np.floor(tworks_cost * 100) / 100
-    
 
-    return str(zest_cost), str(tworks_cost)
+    return str(zest_cost)
 
 button_upload.on_click(process_file)
 
